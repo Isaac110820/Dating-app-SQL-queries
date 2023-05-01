@@ -1,0 +1,274 @@
+---
+title: "Summary of Dating App Experiences in 2022"
+author: "Isaac Baca"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introduction: 
+
+This is a two part project summarizing my experience using three different dating apps in the year 2022.  
+
+1. In part one of this project, I use SQL queries to select, count, filter, group, aggregate, and summarize the data.
+
+2. [In part two of this project](https://public.tableau.com/app/profile/isaac5041/viz/SummaryofDatingAppExperiencesin2022/Dashboard2), I use Tableau to create a dashboard visualizing the data obtained from the SQL queries.
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(odbc)
+library(DBI)
+library(tidyverse)
+library(RSQLite)
+```
+
+
+```{r include=FALSE}
+Dating = read_excel("/Volumes/Vandy Main/Data/Dating Apps/2022/app_data.xlsx")
+```
+
+
+```{r include=FALSE}
+Dating$enjoyment = as.numeric(Dating$enjoyment)
+Dating$paid = as.numeric(Dating$paid)
+Dating$cost = as.numeric(Dating$cost)
+Dating$amount_me = as.numeric(Dating$amount_me)
+Dating$amount_her = as.numeric(Dating$amount_her)
+```
+
+
+```{r include=FALSE}
+con <- dbConnect(drv = RSQLite::SQLite(),
+                 dbname = ":memory:")
+
+#store sample data in database
+dbWriteTable(conn = con, 
+             name = "apps",
+             value = Dating)
+
+
+#remove the local data from the environment
+rm(Book3)
+```
+
+
+---
+
+<a name="one"><a/>
+
+## View the table
+
+---
+
+#### View the `apps` table.
+
+```{sql echo=TRUE, connection=con, output.var="apps"}
+SELECT *
+FROM apps
+LIMIT 5;
+```
+```{R, echo=FALSE}
+print(apps)
+```
+
+
+---
+
+#### Count the total number of matches.
+
+```{sql echo=TRUE, connection=con, output.var="matches"}
+SELECT COUNT(Name) AS count_matches
+FROM apps;
+```
+```{R, echo=FALSE}
+print(matches)
+```
+
+
+---
+
+#### Count the total number of matches grouped by app.
+
+```{sql echo=TRUE, connection=con, output.var="matches_by_app"}
+SELECT app AS App, COUNT(Name) AS count_of_matches
+FROM apps
+GROUP BY app
+ORDER BY app
+```
+```{R, echo=FALSE}
+print(matches_by_app)
+```
+
+
+---
+
+#### Count the total number of conversations.
+
+```{sql echo=TRUE, connection=con, output.var="convos"}
+SELECT COUNT(first_response) AS count_of_convos
+FROM apps
+WHERE first_response = 'yes';
+```
+```{R, echo=FALSE}
+print(convos)
+```
+
+
+---
+
+#### Count the total number of conversations grouped by app.
+
+```{sql echo=TRUE, connection=con, output.var="convos_by_app"}
+SELECT app AS App, COUNT(first_response) AS count_of_convos
+FROM apps
+WHERE first_response = 'yes'
+GROUP BY app
+ORDER BY app
+```
+```{R, echo=FALSE}
+print(convos_by_app)
+```
+
+
+---
+
+#### Count the total number of numbers exchanged.
+
+```{sql echo=TRUE, connection=con, output.var="number"}
+SELECT COUNT(phone_number) AS count_number_exchanged
+FROM apps
+WHERE phone_number = 'yes';
+```
+```{R, echo=FALSE}
+print(number)
+```
+
+
+---
+
+#### Count the total number of numbers exchanged by app.
+
+```{sql echo=TRUE, connection=con, output.var="number_by_app"}
+SELECT app AS App, COUNT(phone_number) AS count_number_exchanged
+FROM apps
+WHERE phone_number = 'yes'
+GROUP BY app
+ORDER BY app
+```
+```{R, echo=FALSE}
+print(number_by_app)
+```
+
+
+---
+
+#### Count the total number of first dates.
+
+```{sql echo=TRUE, connection=con, output.var="dates"}
+SELECT COUNT(first_date) AS count_first_date
+FROM apps
+WHERE first_date = 'yes';
+```
+```{R, echo=FALSE}
+print(dates)
+```
+
+
+---
+
+#### Count the total number of first dates by app.
+
+```{sql echo=TRUE, connection=con, output.var="first_by_app"}
+SELECT app AS App, COUNT(first_date) AS count_first_dates
+FROM apps
+WHERE first_date = 'yes'
+GROUP BY app
+ORDER BY app
+```
+```{R, echo=FALSE}
+print(first_by_app)
+```
+
+
+---
+
+#### Count the total number of second dates.
+
+```{sql echo=TRUE, connection=con, output.var="dates2"}
+SELECT COUNT(second_date) AS count_second_date
+FROM apps
+WHERE second_date = 'yes';
+```
+```{R, echo=FALSE}
+print(dates2)
+```
+
+
+---
+
+#### Count the total number of second dates by app.
+
+```{sql echo=TRUE, connection=con, output.var="second_by_app"}
+SELECT app AS App, COUNT(second_date) AS count_second_dates
+FROM apps
+WHERE second_date = 'yes'
+GROUP BY app
+ORDER BY app
+```
+```{R, echo=FALSE}
+print(second_by_app)
+```
+
+
+---
+
+#### Calculate the total/average amount of money spent.
+
+```{sql echo=TRUE, connection=con, output.var="money_spent"}
+SELECT SUM(amount_me) AS total_money_spent_by_me, SUM(amount_me)/COUNT(first_date) AS avg_spent_per_date
+FROM apps
+WHERE first_date = 'yes';
+```
+```{R, echo=FALSE}
+print(money_spent)
+```
+
+
+---
+
+#### View a table with the total money spent and the amount spent by each person.
+
+```{sql echo=TRUE, connection=con, output.var="cost2"}
+SELECT app AS App, cost AS total_cost_of_date, amount_me AS amount_I_paid, amount_her AS amount_she_paid
+FROM apps
+WHERE first_date = 'yes'
+ORDER BY cost DESC
+```
+```{R, echo=FALSE}
+print(cost2)
+```
+
+
+---
+
+#### View a table of my enjoyment of the dates grouped by app (from 1-10)
+
+```{sql echo=TRUE, connection=con, output.var="enjoyment"}
+SELECT app AS App, enjoyment AS My_enjoyment
+FROM apps
+WHERE first_date = 'yes'
+ORDER BY enjoyment DESC;
+```
+```{R, echo=FALSE}
+print(enjoyment)
+```
+
+
+---
+
+
+This concludes part one of this project.  [Click here](https://public.tableau.com/app/profile/isaac5041/viz/SummaryofDatingAppExperiencesin2022/Dashboard2) to view part two:  the data visualization in Tableau.
+
+---
