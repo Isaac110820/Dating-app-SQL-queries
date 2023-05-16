@@ -22,6 +22,7 @@ library(odbc)
 library(DBI)
 library(tidyverse)
 library(RSQLite)
+library("kableExtra")
 ```
 
 
@@ -70,7 +71,9 @@ FROM apps
 LIMIT 5;
 ```
 ```{R, echo=FALSE}
-print(apps)
+kable(apps) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -83,7 +86,9 @@ SELECT COUNT(Name) AS count_matches
 FROM apps;
 ```
 ```{R, echo=FALSE}
-print(matches)
+kable(matches) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -98,7 +103,9 @@ GROUP BY app
 ORDER BY app
 ```
 ```{R, echo=FALSE}
-print(matches_by_app)
+kable(matches_by_app) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -112,7 +119,9 @@ FROM apps
 WHERE first_response = 'yes';
 ```
 ```{R, echo=FALSE}
-print(convos)
+kable(convos) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -128,7 +137,9 @@ GROUP BY app
 ORDER BY app
 ```
 ```{R, echo=FALSE}
-print(convos_by_app)
+kable(convos_by_app) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -142,7 +153,9 @@ FROM apps
 WHERE phone_number = 'yes';
 ```
 ```{R, echo=FALSE}
-print(number)
+kable(number) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -158,7 +171,9 @@ GROUP BY app
 ORDER BY app
 ```
 ```{R, echo=FALSE}
-print(number_by_app)
+kable(number_by_app) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -172,7 +187,9 @@ FROM apps
 WHERE first_date = 'yes';
 ```
 ```{R, echo=FALSE}
-print(dates)
+kable(dates) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -188,7 +205,9 @@ GROUP BY app
 ORDER BY app
 ```
 ```{R, echo=FALSE}
-print(first_by_app)
+kable(first_by_app) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -202,7 +221,9 @@ FROM apps
 WHERE second_date = 'yes';
 ```
 ```{R, echo=FALSE}
-print(dates2)
+kable(dates2) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -218,7 +239,9 @@ GROUP BY app
 ORDER BY app
 ```
 ```{R, echo=FALSE}
-print(second_by_app)
+kable(second_by_app) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -232,7 +255,9 @@ FROM apps
 WHERE first_date = 'yes';
 ```
 ```{R, echo=FALSE}
-print(money_spent)
+kable(money_spent) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -247,7 +272,9 @@ WHERE first_date = 'yes'
 ORDER BY cost DESC
 ```
 ```{R, echo=FALSE}
-print(cost2)
+kable(cost2) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
@@ -262,7 +289,9 @@ WHERE first_date = 'yes'
 ORDER BY enjoyment DESC;
 ```
 ```{R, echo=FALSE}
-print(enjoyment)
+kable(enjoyment) %>%
+    kable_styling(bootstrap_options = c('striped', 'condensed'), font_size = 10) %>%
+    scroll_box(width = "910px")
 ```
 
 
